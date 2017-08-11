@@ -78,7 +78,7 @@ para frente na velocidade máxima, devo enviar os bytes ['W',(byte)255] para o A
 
 Arduino Analog Motor is a controller that receives serial data (for example, Bluetooth), and control the arduino motors, to move it on the selected speed and direction, combining analog values to move forward/backward, and left/right.
 
-All the development was done using the Arduino IDE (v1.8.2), which includes all the tools for compiling and uploading the code for the Arduino.
+All the development was done using the Arduino IDE (v 1.8.2), which includes all the tools for compiling and uploading the code for the Arduino.
 
 # 1. Installation
 
