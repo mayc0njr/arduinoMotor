@@ -1,4 +1,4 @@
-**You can see the English version of this README by clicking [here](#arduinoMotor---enus).**
+**You can see the English version of this README by clicking [here](#arduino-analog-motor---enus).**
 
 
 # Arduino Analog Motor. - ptBR
