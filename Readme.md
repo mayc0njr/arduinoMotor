@@ -94,7 +94,7 @@ There is no much to do, after download the code, run it on the IDE, or your pref
 * [Arduino IDE](https://www.arduino.cc/en/main/software) Tested version 1.8.2.
 
 
-* [Adafruit Motor Shield](https://learn.adafruit.com/adafruit-motor-shield). You also need to download the library Shield's library.
+* [Adafruit Motor Shield](https://learn.adafruit.com/adafruit-motor-shield). You also need to download the Shield's library.
 
 <!--
 * Unlike most bluetooth controllers, this API makes use of 2 bytes / characters per command.
