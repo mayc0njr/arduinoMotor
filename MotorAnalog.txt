@@ -1,0 +1,5 @@
+Control Adafruit Motor Shield.
+Receives Serial commands, interprete it, and control the 4 motors.
+@Author Maycon Miranda <mayconjr_@live.com> <https://github.com/mayc0njr>
+@Since 11/August/2017
+@Version 0.1b
