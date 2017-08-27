@@ -9,6 +9,7 @@ const char FRENTE = 'W';
 const char TRAS = 'S';
 const char ESQUERDA = 'A';
 const char DIREITA = 'D';
+const char PARA = 'P';
 
 //codigo dos controles adicionais.
 const char NEON = 'N';
@@ -50,21 +51,25 @@ void setup(){
 }
 void loop(){
     Serial.write("WAITING DIRECTION");
-    while(Serial.available() <=0);
+    while(Serial.available() <=0)
+        delay(10);
     bool readed = readDirection();
     if(readed && (lastRead == FRENTE || lastRead == TRAS || lastRead == ESQUERDA || lastRead == DIREITA)){
         Serial.write("WAITING SPEED");
-        while(Serial.available() <=0);
+        while(Serial.available() <=0)
+            delay(10);
         readSpeed();
         if(readed)
             calculateSpeed();
     }else if(readed){
-        while(Serial.available() <=0);
+        while(Serial.available() <=0)
+            delay(10);
             controlaBombaGiro();
         }
 }
 void doTheLogBT(){
     while(Serial.available() > 0){
+        delay(10);
         Serial.write(Serial.read());
         char lido = Serial.read();
         if(lido == 'L'){
@@ -80,12 +85,15 @@ void doTheLogBT(){
 
 //Le uma direcao vinda da rede.
 bool readDirection(){
-    Serial.write("readDirection");
+    // Serial.write("readDirection");
+    while(Serial.available() <= 0)
+        delay(10);
     if(Serial.available() > 0){
+        delay(10);
         char dir = Serial.read();
-        Serial.write("\nD: ");
-        Serial.write(dir);
-        Serial.write("\n");
+        // Serial.write("\nD: ");
+        // Serial.write(dir);
+        // Serial.write("\n");
         lastRead = dir;
         return true;
     }
@@ -94,45 +102,47 @@ bool readDirection(){
 
 //Le a velocidade para se mover naquela direcao.
 void readSpeed(){
-    Serial.write("readSpeed");
+    // Serial.write("readSpeed");
     switch(lastRead){
         case FRENTE:
             speed[0] = Serial.read();
             direction[0] = true;
-            Serial.write("D: ");
-            Serial.write(speed[0]);
-            Serial.write("\n");
+            // Serial.write("D: ");
+            // Serial.write(speed[0]);
+            // Serial.write("\n");
             return;
         case ESQUERDA:
             speed[1] = Serial.read();
             direction[1] = true;
-            Serial.write("D: ");
-            Serial.write(speed[1]);
-            Serial.write("\n");
+            // Serial.write("D: ");
+            // Serial.write(speed[1]);
+            // Serial.write("\n");
             return;
         case TRAS:
             speed[0] = Serial.read();
             direction[0] = false;
-            Serial.write("D: ");
-            Serial.write(speed[0]);
-            Serial.write("\n");
+            // Serial.write("D: ");
+            // Serial.write(speed[0]);
+            // Serial.write("\n");
             return;
         case DIREITA:
             speed[1] = Serial.read();
             direction[1] = false;
-            Serial.write("D: ");
-            Serial.write(speed[1]);
-            Serial.write("\n");
+            // Serial.write("D: ");
+            // Serial.write(speed[1]);
+            // Serial.write("\n");
             return;
         default:
             lastRead = NENHUMA;
-            Serial.write("DEFAULT!\n");
+            // Serial.write("DEFAULT!\n");
             return;
     }
 }
 
 void controlaBombaGiro(){
-    Serial.write("controlaBombaGiro");
+    // Serial.write("controlaBombaGiro");
+    while(Serial.available() <= 0)
+        delay(10);
     peRead = Serial.read();
     switch(lastRead){
         case BOMBA:
@@ -149,6 +159,10 @@ void controlaBombaGiro(){
                 //desliga o boolean que mexe na treta.
             }
             break;
+        case PARA:
+            if(peRead == APERTOU || peRead == SOLTOU){
+                stopAll();
+            }
     }
 
 }
@@ -171,11 +185,11 @@ void calculateSpeed(){
             Serial.write("\n");
         if(frente > lado){
             motoresOposto = frente;
-            motoresEste = abs(lado-frente);
+            motoresEste = frente-lado;
             reverseSide = false;
         }else if(frente < lado){
             motoresOposto = frente;
-            motoresEste = abs(lado-frente);
+            motoresEste = lado-frente;
             reverseSide = true;
         }else{
             motoresOposto = frente;
@@ -188,11 +202,11 @@ void calculateSpeed(){
             motorR2.setSpeed(motoresOposto);
             motorL1.setSpeed(motoresEste);
             motorL2.setSpeed(motoresEste);
-            Serial.write("SpdRgt: ");
+            Serial.write("SpdRgt: \'");
             Serial.write(motoresOposto);
-            Serial.write("    SpdLft: ");
+            Serial.write("\'    SpdLft: \'");
             Serial.write(motoresEste);
-            Serial.write("\n");
+            Serial.write("\'\n");
             motorR1.run(FORWARD);
             motorR2.run(FORWARD);
             Serial.write("DirRgt: ");
@@ -224,11 +238,11 @@ void calculateSpeed(){
             motorR2.setSpeed(motoresEste);
             motorL1.setSpeed(motoresOposto);
             motorL2.setSpeed(motoresOposto);
-            Serial.write("SpdRgt: ");
+            Serial.write("SpdRgt: \'");
             Serial.write(motoresEste);
-            Serial.write("    SpdLft: ");
+            Serial.write("\'    SpdLft: \'");
             Serial.write(motoresOposto);
-            Serial.write("\n");
+            Serial.write("\'\n");
             motorL1.run(FORWARD);
             motorL2.run(FORWARD);
             Serial.write("DirLft: ");
@@ -255,12 +269,16 @@ void calculateSpeed(){
 
         }
     }else{ //TRAS
-        if(frente != lado){
+        if(frente > lado){
             Serial.write("TRAS!");
             Serial.write("\n");
+            
             motoresOposto = frente;
-            motoresEste = lado;
+            motoresEste = frente-lado;
+            reverseSide = false;
         }else if(lado > frente){
+            motoresOposto = frente;
+            motoresEste = lado-frente;
             reverseSide = true;
         }else{
             motoresOposto = frente;
@@ -273,11 +291,11 @@ void calculateSpeed(){
             motorR2.setSpeed(motoresOposto);
             motorL1.setSpeed(motoresEste);
             motorL2.setSpeed(motoresEste);
-            Serial.write("SpdRgt: ");
+            Serial.write("SpdRgt: \'");
             Serial.write(motoresOposto);
-            Serial.write("    SpdLft: ");
+            Serial.write("\'    SpdLft: \'");
             Serial.write(motoresEste);
-            Serial.write("\n");
+            Serial.write("\'\n");
             motorR1.run(BACKWARD);
             motorR2.run(BACKWARD);
             Serial.write("DirRgt: ");
@@ -309,11 +327,11 @@ void calculateSpeed(){
             motorR2.setSpeed(motoresEste);
             motorL1.setSpeed(motoresOposto);
             motorL2.setSpeed(motoresOposto);
-            Serial.write("SpdRgt: ");
+            Serial.write("SpdRgt: \'");
             Serial.write(motoresEste);
-            Serial.write("    SpdLft: ");
+            Serial.write("\'    SpdLft: \'");
             Serial.write(motoresOposto);
-            Serial.write("\n");
+            Serial.write("\'\n");
             motorL1.run(BACKWARD);
             motorL2.run(BACKWARD);
             Serial.write("DirLft: ");
