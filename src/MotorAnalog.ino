@@ -11,13 +11,6 @@ const char ESQUERDA = 'A';
 const char DIREITA = 'D';
 const char PARA = 'P';
 
-//codigo dos controles adicionais.
-const char NEON = 'N';
-const char BOMBA = 'B';
-
-//porta do rele da bomba.
-const int BOMBA_OUT = 13;
-
 //codigo se o botao de direcao foi apertado ou solto.
 const char APERTOU = 'P'; //seta speed
 const char SOLTOU = 'E';
@@ -42,7 +35,6 @@ unsigned char speed[2]; //velocidade vertical e horizontal.
 
 
 void setup(){
-    pinMode(BOMBA_OUT, OUTPUT);
     Serial.begin(9600);
     speed[0] = 0;
     speed[1] = 0;
@@ -61,25 +53,6 @@ void loop(){
         readSpeed();
         if(readed)
             calculateSpeed();
-    }else if(readed){
-        while(Serial.available() <=0)
-            delay(10);
-            controlaBombaGiro();
-        }
-}
-void doTheLogBT(){
-    while(Serial.available() > 0){
-        delay(10);
-        Serial.write(Serial.read());
-        char lido = Serial.read();
-        if(lido == 'L'){
-            digitalWrite(BOMBA_OUT, HIGH);
-            Serial.write("LIGOU!");
-        }
-        else if(lido == 'D'){
-            digitalWrite(BOMBA_OUT, LOW);
-            Serial.write("(des)LIGOU!");
-        }
     }
 }
 
@@ -139,33 +112,6 @@ void readSpeed(){
     }
 }
 
-void controlaBombaGiro(){
-    // Serial.write("controlaBombaGiro");
-    while(Serial.available() <= 0)
-        delay(10);
-    peRead = Serial.read();
-    switch(lastRead){
-        case BOMBA:
-            if(peRead == APERTOU){
-                //liga a saida da bomba
-            }else if(peRead == SOLTOU){
-                //desliga a saida da bomba.
-            }
-            break;
-        case NEON:
-            if(peRead == APERTOU){
-                //liga o boolean que mexe na treta
-            }else if(peRead == SOLTOU){
-                //desliga o boolean que mexe na treta.
-            }
-            break;
-        case PARA:
-            if(peRead == APERTOU || peRead == SOLTOU){
-                stopAll();
-            }
-    }
-
-}
 //Calcula a velocidade que cada motor deve girar para mover o veiculo na direção proposta.
 void calculateSpeed(){
     unsigned char frente, lado;
