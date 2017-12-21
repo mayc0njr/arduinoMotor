@@ -103,7 +103,7 @@ The directions (Front, Back, Left and Right) use "Button" + "Value" to guide the
 # 2. Configuration.
 The basic config is done by  modifying the constants assigned in the "header" of the code.
 They are related to the motors attached to the shield, and the commands received for the control.
-If you're using a bomb, and led, you need to set the digital port respectively for the constants "BOMBA", e "NEON".
+If you're using a pump, and led, you need to set the digital port respectively for the constants "BOMBA", e "NEON".
 
 
 # 2.1. Commands Table.
