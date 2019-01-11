@@ -133,6 +133,7 @@ A tabela abaixo mostra os valores que indicam se o carrinho está Parado, ou na 
 
 * The speed value should be send after the selected direction. Example: To move forward with full speed,
 snd the bytes ['W', (byte)255] to the board.
+
 | Value | Related Command               |
 |:-----:|:-----------------------------:|
 | 0     | Stop the related motors.      |
